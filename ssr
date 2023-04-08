@@ -1,0 +1,87 @@
+Skip to content
+
+    首页
+    PHP源码
+    html5网页模板
+    js特效
+    Window软件
+    Mac软件
+    服务器
+    其他
+
+Search
+如何在Windows Server 上搭建 ShadowsocksR 服务端
+
+一、安装所需环境
+
+    Git for Windows >
+    Python 3.4.4：32位系统点我 > | 64位系统点我 >
+    OpenSSL >  （和上面一样，要对应你的系统，32位系统下载 Win32 OpenSSL v1.0.2h > | 64位系统下载 Win64 OpenSSL v1.0.2h >
+
+二、配置
+
+我以默认安装路径为例，首先下载 SSR，打开 CMD 进入到 C:\Python34\Scripts
+
+Windows 2008 以上的系统也可以用资源管理器进入到 C:\Python34\Scripts 然后按住 Shift + 鼠标右键，选择在此处打开命令窗口
+
+获取 ShadowsocksR
+
+git clone -b manyuser https://github.com/breakwa11/shadowsocks.git
+
+三、运行
+
+进入 C:\Python34\Scripts\shadowsocks\shadowsocks
+
+命令运行：
+
+命令运行 ShadowsocksR
+
+server.py -p 443 -k password -m aes-256-cfb -P auth_sha1_v2 -o tls1.2_ticket_auth
+//说明：-p 端口 -k 密码  -m 加密方式 -P 协议插件 -o 混淆插件
+
+配置文件运行：
+
+在 C:\Python34\Scripts\shadowsocks 打开修改 config.json 后另存名为 user-config.json 放在同一个目录里
+
+配置文件内容
+
+{
+    "server": "0.0.0.0",
+    "server_ipv6": "::",
+    "server_port": 8388,
+    "local_address": "127.0.0.1",
+    "local_port": 1080,
+    "password": "m",
+    "timeout": 120,
+    "udp_timeout": 60,
+    "method": "aes-256-cfb",
+    "protocol": "auth_sha1_v2",
+    "protocol_param": "",
+    "obfs": "tls1.2_ticket_auth",
+    "obfs_param": "",
+    "dns_ipv6": false,
+    "connect_verbose_info": 0,
+    "redirect": "",
+    "fast_open": false
+}
+
+一般个人使用只用修改的选项：
+
+“server_port”: 8388,（服务器端口）
+
+“password”: “m”,（密码）
+
+“method”: “aes-256-cfb”,（加密）
+
+“protocol”: “auth_sha1_v2”,（混淆）
+
+“obfs”: “tls1.2_ticket_auth”,（插件）
+
+详情还可看：配置文件各项说明 >
+
+然后 CMD 在 C:\Python34\Scripts\shadowsocks\shadowsocks  运行 server.py 命令即可。
+文章导航
+←给apicloud Studio2安装插件的一种方法
+python导出wordpress数据库→
+
+Copyright © 2022 源码巴士  鲁ICP备19024253号-1
