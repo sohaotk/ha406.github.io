@@ -1,0 +1,81 @@
+
+跳转到主要内容
+首页
+航行学园
+
+    首页
+    前端
+    分类
+    编程语言
+    移动开发
+
+在Windows Server上安装Shadowsocks服务端
+
+    首页 > 栏目 > Google 推荐使用 MVI 架构？卷起来了~ > 
+
+打印资料网上打印快印印刷书本书籍装订成册彩印复习资料复印店 3.00元
+
+最近在用阿里云的Windows服务器，打算在上面安装一些服务玩玩，例如，上网的时候使用自己服务器的带宽和流量上网，那么在服务器上安装一个代理服务就可以实现这种功能，Shadowsocks Server是一个轻量级隧道Socks5代理，可加密网络通道，目前有几种不同的版本的安装方法，下面是其中之一。
+
+　　1、下载并安装nodejs
+
+　　首先要进入nodejs的网站，下载和安装nodejs环境。
+
+　　2、安装ShadowSocks
+
+　　打开“开始-所有程序-Node.js-Node.js command prompt”，打开nodejs命令端，输入命令：npm install -g shadowsocks
+
+　　3、设置ShadowSocks
+
+　　首先找到shadowsocks安装目录，也就是下面的这个目录C：\Users\Administrator\AppData\Roaming\npm\node_modules\shadowsocks，我们在该文件夹下找到config.json文件，编辑里面的内容和参数。
+
+　　服务器IP换成自己的服务器IP，端口修改。
+
+　　{
+
+　　"server"："127.0.0.1"，//服务器 IP
+
+　　"server_port"：8989，//服务端口号
+
+　　"local_address"："127.0.0.1"，//默认
+
+　　"local_port"：1080，//本地端口
+
+　　"password"："123456"，//密码
+
+　　"timeout"：300，//超时时间
+
+　　"method"："aes-256-cfb"，//加密方式
+
+　　"fast_open"：false
+
+　　}
+
+　　4、运行ShadowSocks服务
+
+　　打开Node.js command prompt 在弹出的命令行中输入：ssserver
+
+　　这样，服务器上的Shadowsocks就安装完成了。
+来源url
+https://my.oschina.net/gfcm/blog/4298586
+栏目
+架构
+深渊向深渊呼唤
+最新内容
+
+    超新星学习通自动刷课答题脚本安装教程
+    写着简单跑得又快的数据库语言 SPL
+    ChatGPT官方API可以抢先体验了
+    入职字节外包一个月，我离职了
+    【狂神说Java】SpringBoot详细笔记(全)
+    刚来的00后太卷了，上班还没2年，跳到我们公司起薪25k....
+    看ChatGPT这形势，留给我们开发人员的时间不多了
+    带你走进API安全的知识海洋
+    8 个很棒的 Vue 开发技巧
+    OpenAI ChatGPT 人工智能机器人注册使用，能以中文对答如流的机器人
+
+    免责声明
+    隐私政策
+    科文园
+
+Copyright © 2023. All rights reserved
