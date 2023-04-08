@@ -1,0 +1,379 @@
+
+Skip to content
+
+Librehat的部落格
+
+Code can be lovely
+
+    Home
+    Leave a Message
+    About Me
+    Privacy Policy
+
+Windows下三分钟搭建Shadowoscks服务器端
+
+之前在V2EX上有人问为啥没人做个在Windows上一键运行Shadowsocks服务器端的程序，我只想说……这是因为没人关注我的libQtShadowsocks项目啊！（脑补暴走漫画表情）
+
+所以本文要来告诉这些想要帮别人的“小白”，轻轻松松只要三分钟，无痛@#@%#*（什么鬼？）让Shadowsocks服务端在你的Windows机器上跑起来！不用自己编译，不用安装什么Python、.Net的。
+
+先上步骤，内情在后面再叙。
+
+    下载最新的shadowsocks-libqss（Fedora下软件包名为shadowsocks-libQtShadowsocks）
+    准备好config.json文件（范例文件点此，点Raw另存为config.json就能下载下来了），server字段填写”0.0.0.0″（如果走IPv6线路，填”::”），加密方式可以改成更新潮的”chacha20″（老旧的Shadowsocks客户端可能不支持chacha20加密）
+    要shadowsocks-libqss.exe以server mode运行需要加上-S参数，你可以从命令行提示符去运行。或者，更简单的，用我写好的bat脚本（点此查看，点Raw按钮另存为bat脚本即可）
+    将shadowsocks-server.bat与shadowsocks-libqss.exe, config.json放在同一个文件夹下，执行shadowsocks-server.bat即可
+
+停止运行？关掉就可以了。下次再运行？执行shadowsocks-server.bat脚本就好了。修改配置文件？别用自带的记事本和写字板，去下载一个Notepad++吧，免得格式乱套了。
+“内情”
+
+使用的这个程序shadowsocks-libqss本身是libQtShadowsocks项目的一部分，最初始的目的是演示如何在Qt程序里调用libQtShadowsocks，后来则成为一个命令行式的客户端/服务端了。因为本身libQtShadowsocks就兼具客户端和服务端的功能，两者的区别很不大，如果拆成两个程序反而奇怪。
+
+所以默认情况下shadowsocks-libqss会读取当前文件夹下的config.json文件，并以客户端模式启动。使用-c可以指定配置文件，而-S参数则使其以服务端模式运行。
+
+配置文件config.json的格式和其他Shadowsocks版本一样，双向兼容~~（说了无痛>.<)
+
+简单说一下相比其他文章提到的其他版本，shadowsocks-libqss的优势在哪里吧。shadowsocks-libev在Windows下编译比较麻烦，如果你下载第三方编译的版本，总是有点不放心不是？（当然，你下载的是我编译的shadowsocks-libqss，如果你不放心就别下拉倒）。shadowsocks-go已经很久没有实质更新了。shadowsocks-csharp-server支持的加密方式很少而且依赖.Net…主线的python版本依赖Python环境，而且要支持Salsa20和ChaCha20的话还要装libsodium，值得注意的还有shadowsocks-libqss的CPU、内存占用小。
+
+最后，我的博客不是反映问题的地方，有问题请报到libQtShadowsocks的issues列表！
+
+05 March 2015 Update:
+从1.4.2版起，服务器地址填写::表示同时监听所有IPv4和所有IPv6地址，和shadowsocks-libev一致。之前的版本填写::仅监听所有IPv6地址。
+
+Author: librehat
+
+自由軟體萬歲！ View all posts by librehat
+Author librehatPosted on 19th February 2015Categories Windows, 應用程式Tags Security, Server, Shadowsocks	
+44 thoughts on “Windows下三分钟搭建Shadowoscks服务器端”
+
+    vincent says:	
+    10th January 2017 at 03:32	
+
+    本地win7搭建代理服务器，但是还需要跳转一层代理？这种哟没什么好的解决方法？
+    fuckyou says:	
+    2nd December 2016 at 12:50	
+
+    我成功了 谢谢楼主 哇哈哈 自由万岁
+    水果 says:	
+    8th November 2016 at 08:53	
+
+    可以使用instsrv.exe+srvany.exe将应用程序安装为服务
+    cmd
+    d:\instsrv.exe shadowsocks d:\srvany.exe
+    然后 注册表
+    HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\shadowsocks
+    添加Parameters项 新建以下几个字符串值。
+    名称 Application 值为你要作为服务运行的程序地址。
+    名称 AppDirectory 值为你要作为服务运行的程序所在文件夹路径。
+    名称 AppParameters 值为你要作为服务运行的程序启动所需要的参数。
+    cmd
+    sc start shadowsocks
+    完成
+    神马都要问 says:	
+    24th October 2016 at 02:05	
+
+    一次安装成功,请问一下我远程服务器要怎么退出登录,这个代理服务才不会掉线,我注销登录就没有了
+        librehat says:	
+        30th October 2016 at 15:14	
+
+        你要让它在后台运行，不太清楚Windows Server怎么操作 :(
+    于飞 says:	
+    8th September 2016 at 09:32	
+
+    我开了以后QQ等软件可以联网但是打不开网页，是不是dns的问题呢？改怎么自定义dns呢？谢谢！
+    MG says:	
+    29th August 2016 at 12:42	
+
+    这个能不能加混淆参数啊？
+    feng says:	
+    20th July 2016 at 02:30	
+
+    奇怪，我在一台可以上网的win2008上，按你所的操作了。把EXE，bat，json都放在一起。然后我本机配了一个服务器，并且用pac模式启动了，可是我去连内网的服务器还是不行。。。
+    slamslam says:	
+    15th July 2016 at 09:08	
+
+    http_proxy 是ss服务器的proxy还是我的proxy
+    s's says:	
+    30th March 2016 at 10:02	
+
+    这个很叼，一开就能用了
+    ck says:	
+    21st March 2016 at 11:51	
+
+    老板的这个软件太赞了，比python版的ss server好用多了，那个python版的很卡，经常打印出连接超时或者发生错误的log信息，还是这个号用，推荐！
+    Zain says:	
+    14th March 2016 at 08:38	
+
+    经过我的一番测试，这个服务端在一个人用的时候很爽，用的人多了就很容易崩掉，推荐个人服务器使用，感谢博主的分享，辛苦了！
+    rootedclub says:	
+    6th March 2016 at 10:15	
+
+    这是我见过的最便捷的方法了。
+    测试了一下都OK
+    就是发现一个问题：在全局模式下不能正常的工作，不知道是什么原因。
+    Zing says:	
+    24th February 2016 at 00:45	
+
+    博主能给个config.json的说明么，如果我是要把外国服务器的SS转发给局域网使用，而且那个SS服务器是有密码的，能用这个么，该怎么写config。
+    王花郎 says:	
+    22nd February 2016 at 03:47	
+
+    感谢分享，已在使用！
+    whisper says:	
+    17th February 2016 at 01:08	
+
+    很好用，不过有个问题了，用一会儿后，VPS端的bat文件就会已停止工作，这是什么原因呢？KVM架构，winserver2012
+    HUANG Renjing says:	
+    11th February 2016 at 16:16	
+
+    大大，我搭建成功了，有版本可以监控人数么？
+    HUANG Renjing says:	
+    11th February 2016 at 15:55	
+
+    大大，什么情况下，建立成功呢？
+    HUANG Renjing says:	
+    11th February 2016 at 15:50	
+
+    我这提示：
+    one-time message authentication for header failed.
+    Can’t parse header: wrong encryption method or password?
+    是怎么回事呢？
+        q120 says:	
+        13th February 2016 at 06:27	
+
+        加密方式 要加 “” 比如”rc4-md5″
+    john says:	
+    5th December 2015 at 15:03	
+
+    你好，部署到服务器上后，使用Safari连接，服务器端会显示如下信息，请问如何解决，好像是浏览器不知道该加密方式或者是密码错误。
+
+    浏览器使用代理时，是选择socks还是使用http？用户名和密码如何输入？
+
+    One-time message authentication for header failed.
+    Can’t parse header. Wrong encryption method or password?
+
+    The Best wish for you！
+    Pingback: 使用AWS搭建SHADOWSOCKS服务 | Goking Headline
+    wyf says:	
+    26th October 2015 at 05:40	
+
+    Initialising ciphers…
+    RC4-MD5 (rc4-md5) initialised.
+    Running in server mode.
+    TCP server listen at port 8388
+    Connecting p.api.pc120.com:80 from 27.129.137.36:54021
+    Connecting p.api.pc120.com:80 from 27.129.137.36:54028
+    Connecting p.api.pc120.com:80 from 27.129.137.36:54180
+    Connecting p.api.pc120.com:80 from 27.129.137.36:54185
+    Connecting 192.168.29.1:80 from 27.129.137.36:54207
+    Remote socket error: Connection timed out
+    Connecting p.api.pc120.com:80 from 27.129.137.36:54220
+    大神 我按你的说明做的 连接后客户端不通 服务端出现这个是什么意思
+        oijo says:	
+        28th October 2015 at 17:07	
+
+        pc120.com 貌似是毒霸的域名，关闭毒霸后试试，
+    oijo says:	
+    1st October 2015 at 18:12	
+
+    用快捷方式 在链接后加个参数比较方便启用。…libqss.exe 在快捷方式 的‘目标’最后直接加参数就行了，还不用要求在同一个文件夹
+        librehat says:	
+        5th October 2015 at 17:45	
+
+        快捷方式也可以。不过不是每个人都喜欢快捷方式这种途径的（比如我就不喜欢在桌面上放太多快捷方式）
+            oijo says:	
+            18th October 2015 at 04:04	
+
+            Just add & to the command line.
+
+            If you need it running as a service, use libev port
+            作者如是说，第一个&不知道放哪里。第二个看着好麻烦。
+            我的处理方法是，用win10的虚拟桌面，放到桌面2就行了。
+            ( ´(00)`)
+    小鱼虾 says:	
+    10th August 2015 at 01:55	
+
+    我刚测试安装存在以下问题，
+    1. 我服务器支持IPv6,如果客户端仅仅ipv4网，是否客户端也可以走我的ipv6网. 也就是说客户端也可以访问ipv6的网站等等. 目前我把本地服务器地址配置成ipv6地址，客户也还是走的ipv4网.
+    2.当客户端配置与我服务器端不匹配时，我服务器端就停止运行了，这样实在存在问题，任意一个客户配置错误，我服务器就不工作了？例如客户端打开udp转发或加密方式不配等
+    3.另外请教个问题，加密方式chacha20服务器端是否还需要特殊配置？我服务器端是否需要或者输入多个加密方式？
+        librehat says:	
+        11th August 2015 at 18:52	
+
+        有问题请报到GitHub项目的issues页面，谢谢。
+
+        ChaCha20不需要特别配置，加密方式一栏填chacha20就可以了。目前shadowsocks-libqss在Windows下的稳定性确实有点问题，正在解决中。如果是生产环境的配置，建议使用主线Python版本做服务器。
+    Xperia says:	
+    20th July 2015 at 14:45	
+
+    有没有软件 或者插件 可以对无法访问网站 自动使用代理刷新重试并且加入代理规则的呢，依靠更新缓慢的代理规则 实在麻烦
+    Xperia says:	
+    18th July 2015 at 11:56	
+
+    从vps下载慢 上传很快什么原因？ vps自身是上下50mbps带宽的
+    xperia says:	
+    8th July 2015 at 12:03	
+
+    怎么也打不开网页，端口监控显示已经连接上。
+        xperia says:	
+        8th July 2015 at 12:05	
+
+        可以了 不能开udp转发
+            librehat says:	
+            9th July 2015 at 22:51	
+
+            Windows平台的限制
+    xperia says:	
+    8th July 2015 at 00:46	
+
+    好像是无法解析域名，请问怎么办？
+        librehat says:	
+        8th July 2015 at 11:15	
+
+        DNS劫持或者污染了，你得先搞定DNS，网上很多教程破除DNS污染的
+    xperia says:	
+    7th July 2015 at 14:58	
+
+    bat运行后是黑屏？
+    我怎么还是翻不出来
+    win下面真是麻烦
+        librehat says:	
+        7th July 2015 at 22:51	
+
+        有几个版本是默认只输出错误信息，所以可能是黑的什么都没有。
+            basin says:	
+            29th November 2015 at 09:18	
+
+            Update to v1.81 today. Changed the -S option for server mode.
+            But found all connection details are shown in the command. How I can go back to only show error info. Thank you!
+                librehat says:	
+                29th November 2015 at 17:49	
+
+                You can’t. The error signal is merged into info.
+    Mingzhi says:	
+    14th April 2015 at 23:26	
+
+    我特意跑上来点个赞，各种方便好用
+    虽然我的目的是反向翻回GFW…cpu占用率很低，用了老的p4笔记本搭建了服务器，在国外成功翻回来看乐视的体育直播
+        librehat says:	
+        15th April 2015 at 21:36	
+
+        诶，多谢了。不过话说你用老的P4跑的什么版本的Windows？（Vista or 7？）
+            mingzhi says:	
+            15th April 2015 at 23:23	
+
+            p4可以跑的是windows 7 32bit, vista很多地方太反人类了，远程桌面及其不舒服。 windows7 把各种特效关掉，装上不知道哪里拆下来的2g内存，做个shadowsocks服务器效果杠杠的。
+    vzch says:	
+    22nd February 2015 at 18:42	
+
+    咱是关注了的，特地跑来点个赞
+
+Comments are closed.
+Post navigation
+Previous Previous post: 调节ODROID-U3的CPU频率（Linux）
+Next Next post: 记伦敦Bloomberg面试
+Search for:
+Categories
+
+    Android (22)
+    BSD (21)
+    Linux (65)
+    Programming (20)
+    Windows (13)
+    作業系統 (13)
+    應用程式 (39)
+    推他歸檔 (8)
+    新聞 (11)
+    未分類 (37)
+    網路 (24)
+    遊記 (4)
+
+Tags
+
+    Announcement AppFog Apple C++ cloud Compile CrOS Driver English entropay Fedora Firefox Fitness Google GRUB2 HTML5 iOS JavaScript KDE Kindle LAN ODROID Office Open-Source OpenCV OpenShift Optimisation ownCloud Python Qt RHEL Ruby Security Server Shadowsocks Shell Slax Ubuntu VISA 海淘 
+
+Archives
+
+    November 2022
+    December 2021
+    July 2021
+    June 2021
+    May 2021
+    April 2021
+    December 2020
+    November 2020
+    October 2020
+    July 2020
+    June 2020
+    May 2020
+    April 2020
+    February 2020
+    November 2019
+    April 2019
+    March 2019
+    November 2018
+    October 2018
+    March 2018
+    May 2017
+    November 2016
+    September 2016
+    August 2016
+    April 2016
+    March 2016
+    January 2016
+    December 2015
+    November 2015
+    September 2015
+    July 2015
+    June 2015
+    May 2015
+    March 2015
+    February 2015
+    December 2014
+    November 2014
+    October 2014
+    August 2014
+    July 2014
+    June 2014
+    May 2014
+    April 2014
+    March 2014
+    February 2014
+    January 2014
+    December 2013
+    November 2013
+    October 2013
+    September 2013
+    August 2013
+    July 2013
+    June 2013
+    May 2013
+    April 2013
+    March 2013
+    February 2013
+    January 2013
+    December 2012
+    November 2012
+    October 2012
+    September 2012
+
+Links
+
+    做最好的三三
+    殘響 – サバ
+    Infinite Script
+    钉子の次元
+    奶牛博客
+    7IN0′s Geeklog
+    尘埃落定
+    自说Me话
+
+Meta
+
+    Log in
+    Entries feed
+    Comments feed
+    WordPress.org
+
+Librehat的部落格 Privacy Policy	Proudly powered by WordPress
+Light
+Dark
